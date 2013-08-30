@@ -212,7 +212,7 @@ void LoopAll::SetAllMVA() {
   tmvaReaderID_2013_Barrel->AddVariable("rho",   &tmva_photonid_eventrho );
   
   tmvaReaderID_2013_Endcap = new TMVA::Reader("!Color:Silent");
-  tmvaReaderID_2013_Barrel->AddVariable("ph.scrawe",   &tmva_photonid_scrawe );
+  tmvaReaderID_2013_Endcap->AddVariable("ph.scrawe",   &tmva_photonid_scrawe );
   tmvaReaderID_2013_Endcap->AddVariable("ph.r9",   &tmva_photonid_r9 );
   tmvaReaderID_2013_Endcap->AddVariable("ph.sigietaieta",   &tmva_photonid_sieie );
   tmvaReaderID_2013_Endcap->AddVariable("ph.scetawidth",   &tmva_photonid_etawidth );
