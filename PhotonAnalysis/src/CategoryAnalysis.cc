@@ -224,16 +224,16 @@ void CategoryAnalysis::Init(LoopAll& l)
     l.tmvaReaderID_UCSD->BookMVA("Gradient"      ,photonLevelMvaUCSD.c_str()  );
     l.tmvaReader_dipho_UCSD->BookMVA("Gradient"  ,eventLevelMvaUCSD.c_str()   );
     // New ID MVA
-    if( photonLevelNewIDMVA_EB != "" && photonLevelNewIDMVA_EE != "" ) {
-	l.tmvaReaderID_Single_Barrel->BookMVA("AdaBoost",photonLevelNewIDMVA_EB.c_str());
-	l.tmvaReaderID_Single_Endcap->BookMVA("AdaBoost",photonLevelNewIDMVA_EE.c_str());
+    if( photonLevel2012IDMVA_EB != "" && photonLevel2012IDMVA_EE != "" ) {
+	l.tmvaReaderID_Single_Barrel->BookMVA("AdaBoost",photonLevel2012IDMVA_EB.c_str());
+	l.tmvaReaderID_Single_Endcap->BookMVA("AdaBoost",photonLevel2012IDMVA_EE.c_str());
     } else { 
 	assert( run7TeV4Xanalysis );
     }
     // MIT 
-    if( photonLevelMvaMIT_EB != "" && photonLevelMvaMIT_EE != "" ) {
-	l.tmvaReaderID_MIT_Barrel->BookMVA("AdaBoost",photonLevelMvaMIT_EB.c_str());
-	l.tmvaReaderID_MIT_Endcap->BookMVA("AdaBoost",photonLevelMvaMIT_EE.c_str());
+    if( photonLevel2011IDMVA_EB != "" && photonLevel2011IDMVA_EE != "" ) {
+	l.tmvaReaderID_MIT_Barrel->BookMVA("AdaBoost",photonLevel2011IDMVA_EB.c_str());
+	l.tmvaReaderID_MIT_Endcap->BookMVA("AdaBoost",photonLevel2011IDMVA_EE.c_str());
     } else {
 	assert( ! run7TeV4Xanalysis );
     }
@@ -248,6 +248,9 @@ void CategoryAnalysis::Init(LoopAll& l)
     cout << "saveDatTr - " << saveDatacardTrees_ << endl;
     cout << "-------------------------" << endl;
     // FIXME book of additional variables
+
+    if (bdtTrainingType == "") 
+        bdtTrainingType = bdtTrainingPhilosophy;
 }
 
 bool CategoryAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentzVector & gP4,
@@ -458,8 +461,8 @@ bool CategoryAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLor
       // easy to calculate vertex probability from vtx mva output
       float vtxProb   = 1.-0.49*(vtx_mva+1.0); /// should better use this: vtxAna_.setPairID(diphoton_id); vtxAna_.vertexProbability(vtx_mva); PM
 
-      float phoid_mvaout_lead = l.photonIDMVANew(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,bdtTrainingPhilosophy.c_str());
-      float phoid_mvaout_sublead = l.photonIDMVANew(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,bdtTrainingPhilosophy.c_str());
+      float phoid_mvaout_lead = l.photonIDMVA2012(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,bdtTrainingPhilosophy.c_str());
+      float phoid_mvaout_sublead = l.photonIDMVA2012(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,bdtTrainingPhilosophy.c_str());
 
       // apply di-photon level smearings and corrections
       selectioncategory = l.DiphotonCategory(diphoton_index.first,diphoton_index.second,Higgs.Pt(),nEtaCategories,nR9Categories,0);
@@ -469,7 +472,7 @@ bool CategoryAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLor
       }
                            
       // Must be calculated after photon id has potentially been smeared
-      diphobdt_output = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id] ,vtxProb,lead_p4,sublead_p4 ,sigmaMrv,sigmaMwv,sigmaMeonly ,bdtTrainingPhilosophy.c_str() ,phoid_mvaout_lead,phoid_mvaout_sublead);
+      diphobdt_output = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id] ,vtxProb,lead_p4,sublead_p4 ,sigmaMrv,sigmaMwv,sigmaMeonly ,bdtTrainingPhilosophy.c_str() , bdtTrainingType.c_str(),phoid_mvaout_lead,phoid_mvaout_sublead);
       kinematic_bdtout = diphobdt_output;
 
       mass = Higgs.M();
@@ -588,10 +591,10 @@ int CategoryAnalysis::GetBDTBoundaryCategory(float bdtout, bool isEB, bool VBFev
             if (bdtout >= 0.1) return 6;
         }
 
-    } else if (bdtTrainingPhilosophy=="MIT"){
-	    int cat = categoryFromBoundaries( bdtCategoryBoundaries, bdtout );
-	    if( VBFevent && cat > -1 ) cat = bdtCategoryBoundaries.size();
-	    return cat;
+    } else if (bdtTrainingPhilosophy=="MIT") {
+	int cat = categoryFromBoundaries( bdtCategoryBoundaries, bdtout );
+	if( VBFevent && cat > -1 ) cat = bdtCategoryBoundaries.size();
+	return cat;
     } else std::cerr << "No BDT Philosophy known - " << bdtTrainingPhilosophy << std::endl;
 }
 

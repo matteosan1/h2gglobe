@@ -332,7 +332,7 @@ class LoopAll {
   TMVA::Reader *tmvaReaderID_Single_Barrel, *tmvaReaderID_Single_Endcap;
   TMVA::Reader *tmvaReaderID_2013_Barrel, *tmvaReaderID_2013_Endcap;
 
-  Float_t photonIDMVANew(Int_t, Int_t, TLorentzVector &, const char*);
+  Float_t photonIDMVA2012(Int_t, Int_t, TLorentzVector &, const char*);
   Float_t photonIDMVA2013(Int_t, Int_t, TLorentzVector &, const char*);
 
   Float_t tmva_photonid_pfchargedisogood03;
@@ -1246,8 +1246,8 @@ TLorentzVector correctMet_Simple(TLorentzVector& pho_lead, TLorentzVector& pho_s
 
 void SetAllMVA();
 void FillMuonGsfTracks();
-Float_t photonIDMVA(Int_t, Int_t, TLorentzVector &, const char*);
-Float_t diphotonMVA(Int_t, Int_t, Int_t, float, TLorentzVector &, TLorentzVector &, float,float,float,const char*,float photonID_1=-50.,float photonID_2=-50.);
+Float_t photonIDMVA2011(Int_t, Int_t, TLorentzVector &, const char*);
+Float_t diphotonMVA(Int_t, Int_t, Int_t, float, TLorentzVector &, TLorentzVector &, float,float,float,const char*,const char*,float photonID_1=-50.,float photonID_2=-50.);
 float getDmOverDz(Int_t, Int_t, Float_t*);
 Float_t deltaMassVtx(Int_t, Int_t, Float_t);
 

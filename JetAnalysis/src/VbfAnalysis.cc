@@ -287,14 +287,14 @@ bool VbfAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentzV
         float vtxProb   = 1.-0.49*(vtx_mva+1.0); 
 
         float phoid_mvaout_lead = ( run7TeV4Xanalysis ? 
-				    l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],
+				    l.photonIDMVA2011(diphoton_index.first,l.dipho_vtxind[diphoton_id],
 						  lead_p4,bdtTrainingPhilosophy.c_str()) :
-				    l.photonIDMVANew(diphoton_index.first,l.dipho_vtxind[diphoton_id],
+				    l.photonIDMVA2012(diphoton_index.first,l.dipho_vtxind[diphoton_id],
 						     lead_p4,bdtTrainingPhilosophy.c_str()) );
         float phoid_mvaout_sublead = ( run7TeV4Xanalysis ? 
-				       l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],
+				       l.photonIDMVA2011(diphoton_index.second,l.dipho_vtxind[diphoton_id],
 						     sublead_p4,bdtTrainingPhilosophy.c_str()) : 
-				       l.photonIDMVANew(diphoton_index.second,l.dipho_vtxind[diphoton_id],
+				       l.photonIDMVA2012(diphoton_index.second,l.dipho_vtxind[diphoton_id],
 							sublead_p4,bdtTrainingPhilosophy.c_str()) );
 	// apply di-photon level smearings and corrections
         int selectioncategory = l.DiphotonCategory(diphoton_index.first,diphoton_index.second,Higgs.Pt(),nEtaCategories,nR9Categories,0);
@@ -307,7 +307,7 @@ bool VbfAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentzV
 
 	float diphobdt_output = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id] ,
 					      vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,
-					      bdtTrainingPhilosophy.c_str(),
+					      bdtTrainingPhilosophy.c_str(), bdtTrainingType.c_str(),
 					      phoid_mvaout_lead,phoid_mvaout_sublead);
 	
 		

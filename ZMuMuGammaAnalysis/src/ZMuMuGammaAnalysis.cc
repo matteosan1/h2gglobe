@@ -23,9 +23,9 @@ void ZMuMuGammaAnalysis::Init(LoopAll& l)
     PhotonAnalysis::Init(l);
 
     l.SetAllMVA();
-    cout << "Weights file is: " << photonLevelNewIDMVA_EB.c_str() << endl;
-    l.tmvaReaderID_2013_Barrel->BookMVA("AdaBoost",photonLevelNewIDMVA_EB.c_str());
-    l.tmvaReaderID_2013_Endcap->BookMVA("AdaBoost",photonLevelNewIDMVA_EE.c_str());
+    cout << "Weights file is: " << photonLevel2012IDMVA_EB.c_str() << endl;
+    l.tmvaReaderID_2013_Barrel->BookMVA("AdaBoost",photonLevel2012IDMVA_EB.c_str());
+    l.tmvaReaderID_2013_Endcap->BookMVA("AdaBoost",photonLevel2012IDMVA_EE.c_str());
     
 }
 
