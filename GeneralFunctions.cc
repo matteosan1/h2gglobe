@@ -3,6 +3,16 @@
 #include "TRandom3.h"
 #define GFDEBUG 0
 
+float LoopAll::r9QQCorrection(float r9, float eta) {
+
+  if (fabs(eta)<1.479) 
+    return r9b_qq_2->Eval(r9);
+  else
+    return r9e_qq_2->Eval(r9);
+
+  return -1;
+}
+
 float LoopAll::pfTkIsoWithVertex(int phoindex, int vtxInd, float dRmax, float dRvetoBarrel, float dRvetoEndcap, 
                                  float ptMin, float dzMax, float dxyMax, int pfToUse) {
   

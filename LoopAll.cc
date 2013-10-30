@@ -437,6 +437,11 @@ LoopAll::LoopAll(TTree *tree) :
   applyEcalIsoPresel = false;
   pfisoOffset=2.5;
   cicVersion="7TeV";
+
+  TFile* file = new TFile(r9QQCorrectionFile.c_str());
+  r9b_qq_2 = (TGraph*)(file->Get("r9b_qq_2")->Clone());
+  r9e_qq_2 = (TGraph*)(file->Get("r9e_qq_2")->Clone());
+  file->Close();
 }
 
 // ------------------------------------------------------------------------------------

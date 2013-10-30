@@ -140,3 +140,5 @@ splitwzh=1
 datacardTreeMass=125
 
 scaleClusterShapes=0
+
+r9QQCorrectionFile=aux/s12_to_r12a_qqcorrections.root

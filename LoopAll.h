@@ -144,8 +144,11 @@ class LoopAll {
   
   std::vector<TH1*> globalHistos;
   void AddGlobalHisto(TH1 * x ) { x->SetDirectory(0); globalHistos.push_back(x); }
+  
   TH1D  * pileup;
-
+  TGraph* r9b_qq_2, *r9e_qq_2;
+  Float_t r9QQCorrection(Float_t r9, Float_t eta);
+  std::string r9QQCorrectionFile;
 
   TFile * outputFile;
   TString outputFileName;
