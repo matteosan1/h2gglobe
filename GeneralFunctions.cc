@@ -401,20 +401,22 @@ Float_t LoopAll::photonIDMVA2012(Int_t iPhoton, Int_t vtx, TLorentzVector &p4, c
 }
 
 Float_t LoopAll::photonIDMVA(Int_t iPhoton, Int_t vtx, TLorentzVector &p4, const char* type)  {
-	if( pho_idmva_cached && pho_idmva[iPhoton][vtx] > -2 ) {
-		return pho_idmva[iPhoton][vtx];
-	}
-	TString t(type);
-	if( t == "MIT" ) {
-		return photonIDMVA2013(iPhoton,vtx,p4,"MIT");
-	} else if( t == "Moriond2013" ) {
-		return photonIDMVA2012(iPhoton,vtx,p4,"MIT");
-	} else if( t == "Old7TeV" ) {
-		return photonIDMVA2011(iPhoton,vtx,p4,"MIT");
-	} else {
-		std::cerr << "Uknown BDT type " << t << std::endl;
-		assert(0);
-	}
+  if( pho_idmva_cached && pho_idmva[iPhoton][vtx] > -2 ) {
+    return pho_idmva[iPhoton][vtx];
+  }
+  TString t(type);
+  if( t == "MIT" ) {
+    return photonIDMVA2013(iPhoton,vtx,p4,"MIT");
+  } else if( t == "Moriond2013" ) {
+    return photonIDMVA2012(iPhoton,vtx,p4,"MIT");
+  } else if( t == "Old7TeV" ) {
+    return photonIDMVA2011(iPhoton,vtx,p4,"MIT");
+  } else if( t == "2013_7TeV") {
+    return photonIDMVA2013_7TeV(iPhoton, vtx, p4, "MIT");
+  } else {
+    std::cerr << "Uknown BDT type " << t << std::endl;
+    assert(0);
+  }
 }
 
 Float_t LoopAll::photonIDMVA2011(Int_t iPhoton, Int_t vtx, TLorentzVector &p4, const char* type)  {
@@ -484,7 +486,6 @@ Float_t LoopAll::photonIDMVA2011(Int_t iPhoton, Int_t vtx, TLorentzVector &p4, c
     return mva;
 }
 
-
 Float_t LoopAll::diphotonMVA(Int_t diphoton_id, Int_t leadingPho, Int_t subleadingPho, Int_t vtx, float vtxProb, TLorentzVector &leadP4, TLorentzVector &subleadP4, float sigmaMrv, float sigmaMwv, float sigmaMeonly, const char* idType, const char* bdtType, float photonID_1,float photonID_2) {
 
     // Ok need to re-write the diphoton-mva part since the systematics won't work unless we can change the Et of the photons
@@ -520,20 +521,25 @@ Float_t LoopAll::diphotonMVA(Int_t diphoton_id, Int_t leadingPho, Int_t subleadi
         *tmva_dipho_MIT_ptom2 = subleadPt/mass;
         *tmva_dipho_MIT_eta1 = leadP4.Eta();
         *tmva_dipho_MIT_eta2 =  subleadP4.Eta();
-	*tmva_dipho_MIT_dphi = TMath::Cos(leadP4.Phi() - subleadP4.Phi());
+        *tmva_dipho_MIT_dphi = TMath::Cos(leadP4.Phi() - subleadP4.Phi());
       
         if (photonID_1 < -1. && photonID_2 < -1.) {
-	  *tmva_dipho_MIT_ph1mva = photonIDMVA(leadingPho,vtx, leadP4, bdtType);
-	  *tmva_dipho_MIT_ph1mva = photonIDMVA(subleadingPho,vtx, subleadP4, bdtType);
+          *tmva_dipho_MIT_ph1mva = photonIDMVA(leadingPho,vtx, leadP4, bdtType);
+          *tmva_dipho_MIT_ph2mva = photonIDMVA(subleadingPho,vtx, subleadP4, bdtType);
         } else {
-	  *tmva_dipho_MIT_ph1mva = photonID_1;
-	  *tmva_dipho_MIT_ph2mva = photonID_2;
+          *tmva_dipho_MIT_ph1mva = photonID_1;
+          *tmva_dipho_MIT_ph2mva = photonID_2;
         }
-  
-	tmva_dipho_MIT_cache[diphoton_id] = tmva_dipho_MIT_buf;
-	mva = ( funcReader_dipho_MIT != 0 ? funcReader_dipho_MIT->eval() : tmvaReader_dipho_MIT->EvaluateMVA("Gradient") );
+	
+	//std::cout << *tmva_dipho_MIT_dmom << " " << *tmva_dipho_MIT_dmom_wrong_vtx << " " << *tmva_dipho_MIT_vtxprob
+	//	  << *tmva_dipho_MIT_ptom1 << " " << *tmva_dipho_MIT_ptom2 << " " << *tmva_dipho_MIT_eta1 << " " << *tmva_dipho_MIT_dphi 
+	//	  << *tmva_dipho_MIT_ph1mva << " " << *tmva_dipho_MIT_ph2mva << std::endl;
+
+        tmva_dipho_MIT_cache[diphoton_id] = tmva_dipho_MIT_buf;
+        mva = ( funcReader_dipho_MIT != 0 ? funcReader_dipho_MIT->eval() : tmvaReader_dipho_MIT->EvaluateMVA("Gradient") );
+	//std::cout << mva << std::endl;
     }
-    
+
     return mva;
 }
 

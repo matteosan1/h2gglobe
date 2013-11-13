@@ -4090,9 +4090,9 @@ bool PhotonAnalysis::FillDijetVariables(int & ijet1, int & ijet2, LoopAll& l, in
     myVBFdPhi   = fabs(diphoton.DeltaPhi(dijet));
     //    myVBFdPhiTrunc   = TMath::Min( (double)myVBFdPhi, TMath::Pi() - 0.2 );
     if(l.sqrtS==7){
-      myVBFdPhiTrunc   = TMath::Min( (double)myVBFdPhi, 2.9416);
+        myVBFdPhiTrunc   = TMath::Min( (double)myVBFdPhi, 2.9416);
     } else if(l.sqrtS==8){
-      myVBFdPhiTrunc   = TMath::Min( (double)myVBFdPhi, 2.916);
+        myVBFdPhiTrunc   = TMath::Min( (double)myVBFdPhi, 2.916);
     }
     myVBF_Mgg   = diphoton.M();
     myVBFDiPhoPtOverM   = diphoton.Pt()   / myVBF_Mgg;

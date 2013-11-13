@@ -35,8 +35,10 @@ doEresolSyst=1
 doRegressionSmear=1
 doRegressionSyst=1
 
-doPhotonIdEffSyst=1
-doPhotonIdEffSmear=1
+doPhotonIdEffSyst=0
+doPhotonIdEffSmear=0
+#1
+#1
 
 doVtxEffSyst=1
 doVtxEffSmear=1
@@ -44,15 +46,17 @@ doVtxEffSmear=1
 doTriggerEffSmear=1
 doTriggerEffSyst=1
 
-doPhotonMvaIdSmear=1
-doPhotonMvaIdSyst=1
-
+doPhotonMvaIdSmear=0 
+#1
+doPhotonMvaIdSyst=0
+#1
 doR9Smear=0
 doR9Syst=0
 
-doKFactorSmear=1
-doKFactorSyst=1
-
+doKFactorSmear=0
+doKFactorSyst=0
+#1
+#1
 
 # BDTs
 bdtTrainingPhilosophy=MIT
@@ -69,15 +73,29 @@ photonLevel2013_7TeV_IDMVA_EB=aux/2013FinalPaper_PhotonID_Barrel_BDT_TrainRangeP
 photonLevel2013_7TeV_IDMVA_EE=aux/2013FinalPaper_PhotonID_Endcap_BDT_TrainRangePT15_7TeV.weights.xml
 eventLevelMvaMIT=aux/HggBambu_SMDipho_Oct29_rwgtptallsigevenbkg7TeV_BDTG.weights.xml
 
-bkgPolOrderByCat=4,5,5,5,3
+combinedmvaVbfSelection=1
+mvaVbfSelection=1
+mvaVbfWeights=aux/TMVA_dijet_7TeV_evenb_v1_ptrwght_Gradient.weights.xml
+mvaVbfMethod=Gradient
+mvaVbfDiphoWeights=aux/TMVA_vbf_dijet_dipho_2evenb_maxdPhi_7TeV_v1_Gradient.weights.xml
+mvaVbfDiphoMethod=Gradient
+mvaVbfCatBoundaries=
+#dijet BDT
+multiclassVbfCatBoundaries0=1.0,0.78,0.5
+#combined BDT
+multiclassVbfCatBoundaries1=1.0,0.934,0.62
+multiclassVbfCatBoundaries2=10.,-10.
+
+bkgPolOrderByCat=5,5,5,5,3,4,3,3,3,-10,3
+
+bdtCategoryBoundaries=1,0.97,0.92,0.78,0.42
 
 # photon ID preselection
-phoidMvaCut=-0.3
-
-# BDT categories
-bdtCategoryBoundaries=1,0.89,0.74,0.545,0.05
+phoidMvaCut=-0.2
 
 effPhotonCategoryType=3CatR9_EBEE
 effPhotonNCat=6
-efficiencyFileMVA=aux/sig_reweighing_moriond2013_run2012ABCD_mva_v2.root
+# FIXME
+efficiencyFileMVA=aux/sig_reweighing_legacy_run2011_cutbased_v3.root
+
 

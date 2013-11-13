@@ -2300,6 +2300,7 @@ void StatAnalysis::fillOpTree(LoopAll& l, const TLorentzVector & lead_p4, const 
     l.FillTree("dijet_dPhi",        myVBFdPhi);
     l.FillTree("dijet_Mjj",         myVBF_Mjj);
     l.FillTree("dijet_MVA",         myVBF_MVA);
+    l.FillTree("bdt_combined",      myVBFcombined);
 
     l.FillTree("issyst", (int)isSyst);
     l.FillTree("name1", name1);
