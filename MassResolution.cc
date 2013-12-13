@@ -128,6 +128,23 @@ double MassResolution::massResolutionEonly() {
   return 0.5*higgsMass*TMath::Sqrt((lead_sig*lead_sig)/(lead_E*lead_E)+(sublead_sig*sublead_sig)/(sublead_E*sublead_E));
 }
 
+double MassResolution::massResolutionEonly(float scale1, float scale2) {
+
+  double lead_E = leadPhoton->energy();
+  double sublead_E = subleadPhoton->energy();
+  double lead_sig = leadPhotonResolution()*scale1;
+  double sublead_sig = subleadPhotonResolution()*scale2;
+
+  return 0.5*higgsMass*TMath::Sqrt((lead_sig*lead_sig)/(lead_E*lead_E)+(sublead_sig*sublead_sig)/(sublead_E*sublead_E));
+}
+
+double MassResolution::massResolutionWrongVtx(float scale1, float scale2) {
+  double alpha_sig = higgsMass*0.5*angleResolutionWrongVtx();
+  
+  double sigmaM = massResolutionEonly(scale1, scale2);
+  return TMath::Sqrt((sigmaM*sigmaM)+(alpha_sig*alpha_sig));
+}
+
 double MassResolution::massResolutionEonlyNoSmear(){
   
   double lead_E = leadPhoton->energy();

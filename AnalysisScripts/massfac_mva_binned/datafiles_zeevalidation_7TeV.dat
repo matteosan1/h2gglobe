@@ -3,13 +3,16 @@ intL=5089. histfile=CMS-HGG_zeevalidation.root output=eventsList.txt sqrtS=7
 #
 # Data
 #
-typ=0   ind=0 draw=1   Nam=Data tot=1 red=1 lum=1.0e10   xsec=1. kfac=1.0   scal=1.   CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v2/data/Photon_Run2011A_21Jun2013_v1
-typ=0   ind=0 draw=1   Nam=Data tot=1 red=1 lum=1.0e10   xsec=1. kfac=1.0   scal=1.   CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v2/data/Photon_Run2011B_21Jun2013_v1
+typ=0 ind=0 draw=1 Nam=Data tot=1 red=1 lum=1.0e10 xsec=1. kfac=1.0 scal=1. CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v4/data/Photon_Run2011A_21Jun2013_v1
+typ=0 ind=0 draw=1 Nam=Data tot=1 red=1 lum=1.0e10 xsec=1. kfac=1.0 scal=1. CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v4/data/Photon_Run2011B_21Jun2013_v1
+
+#typ=0   ind=0 draw=1   Nam=Data tot=1 red=1 lum=1.0e10   xsec=1. kfac=1.0   scal=1.   CaDir=/store/group/phys_higgs/cmshgg/matteo/reduced/8TeV_v1/DE_A_2011
+#typ=0   ind=0 draw=1   Nam=Data tot=1 red=1 lum=1.0e10   xsec=1. kfac=1.0   scal=1.   CaDir=/store/group/phys_higgs/cmshgg/matteo/reduced/8TeV_v1/DE_B_2011
 
 #
 # DY MC
 #
-typ=-38    ind=98 draw=1  Nam=DYJetsToLL   CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v2/mc/DYJetsToLL_TuneZ2_M-50_7TeV-powheg-pythia_Summer11dr53X-PU_S13_START53_LV3-v1  red=0   lum=1.e10  xsec=2475 kfac=1.15  scal=1.
+typ=-38    ind=98 draw=1  Nam=DYJetsToLL   CaDir=/store/group/phys_higgs/cmshgg/reduced/legacy_paper/legacy_paper_reduction_7TeV_v4/mc/DYJetsToLL_TuneZ2_M-50_7TeV-powheg-pythia_Summer11dr53X-PU_S13_START53_LV3-v1  red=0   lum=1.e10  xsec=2475 kfac=1.15  scal=1.
 
 ##
 ## Branches to use
@@ -18,6 +21,7 @@ inputBranches minimal_analysis_input.dat
 inputBranches jun21rereco_7TeV/massfactorizedmvaanalysis_input.dat
 inputBranches minimal_leptmetanalysis_input.dat
 inputBranches escaleTrees_input.dat
+inputBranches zeevalidation_input.dat
 
 runZeeValidation=1
 plotvariables massfac_mva_binned/plotvariables_zee.dat
@@ -31,5 +35,4 @@ treevariables massfac_mva_binned/treevariables_optree.dat
 ## 	analyzer <class_name> <config_file>
 ## 
 ## analyzer PhotonAnalysis photonanalysis.dat
-
-analyzer MassFactorizedMvaAnalysis photonanalysis.dat jun21rereco_7TeV/analysis_settings.dat jun21rereco_7TeV/massfactorizedmvaanalysis.dat jun21rereco_7TeV/zeevalidation.dat fillEscaleTrees=0 useRunDTriggersForZee=0 fillOptTree=1
+analyzer MassFactorizedMvaAnalysis photonanalysis.dat analysis_settings.dat jun21rereco_7TeV/analysis_settings.dat massfactorizedmvaanalysis.dat jun21rereco_7TeV/massfactorizedmvaanalysis.dat jun21rereco_7TeV/zeevalidation.dat fillEscaleTrees=0 useRunDTriggersForZee=0 fillOptTree=1

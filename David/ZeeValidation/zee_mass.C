@@ -1,4 +1,4 @@
-void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
+void zee_mass(bool equalArea=true, bool includeDijetCats=false, bool is7TeV=false) {
 
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
@@ -12,8 +12,14 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
   TString preselNorm_str = "";
   if (!equalArea) preselNorm_str = "_preselNorm";
 
-  int nMvaCats=4;
-  if (includeDijetCats) nMvaCats=6;
+  int nMvaCats=5;
+  if (is7TeV)
+    nMvaCats=4;
+  if (includeDijetCats) {
+    nMvaCats=8;
+    if (is7TeV)
+      nMvaCats=6;
+  }
 
   TFile *file = TFile::Open("histograms_CMS-HGG_zeevalidation.root");
   file->cd();
@@ -32,7 +38,7 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
 
   TH1* mass_Data[7];
   TH1* mass_MC[7];
-  TH1* mass_ratio[7];
+  TH1* mass_ratio[32];
   TH1* mass_basecat_Data[4];
   TH1* mass_basecat_MC[4];
   TH1* mass_pt_Data[5];
@@ -41,6 +47,9 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
   TH1* mass_nvtx_MC[3];
   TH1* mass_passMVA_nvtx_Data[3];
   TH1* mass_passMVA_nvtx_MC[3];
+  TH1* mass_htbins_Data[32];
+  TH1* mass_htbins_MC[32];
+  
 
   for (int i=0; i<7; i++) {
     TString iStr;
@@ -56,6 +65,14 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
     mass_basecat_Data[i] = (TH1*)(file->Get("mass_basecat_cat"+iStr+"_Data"))->Clone();
     mass_basecat_MC[i] = (TH1*)(file->Get("mass_basecat_cat"+iStr+"_DYJetsToLL"))->Clone();
     mass_basecat_Data[i]->GetXaxis()->SetTitleSize(0.06);
+  }
+
+  for (int i=0; i<32; i++) {
+    TString iStr;
+    iStr+=i;
+    mass_htbins_Data[i] = (TH1*)(file->Get("mass_htbins_cat"+iStr+"_Data"))->Clone();
+    mass_htbins_MC[i] = (TH1*)(file->Get("mass_htbins_cat"+iStr+"_DYJetsToLL"))->Clone();
+    mass_htbins_Data[i]->GetXaxis()->SetTitleSize(0.06);
   }
 
   mass_pt_Data[0] = (TH1*)(file->Get("mass_pt0to20_cat0_Data"))->Clone();
@@ -407,7 +424,7 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
   c_mass_nvtx->SaveAs("mass_nvtx"+preselNorm_str+".png");
 
   //------------------------------------------------------------------------------
-
+  
   TCanvas *c_mass_passMVA_nvtx = new TCanvas("c_mass_passMVA_nvtx","di-photon mass",1600,600);
   c_mass_passMVA_nvtx->Divide(3,2);
 
@@ -452,5 +469,58 @@ void zee_mass(bool equalArea=true, bool includeDijetCats=false) {
 
   c_mass_passMVA_nvtx->SaveAs("mass_passMVA_nvtx"+preselNorm_str+".png");
   c_mass_passMVA_nvtx->SaveAs("mass_passMVA_nvtx"+preselNorm_str+".pdf");
+  
+  //------------------------------------------------------------------------
+  
+  for(int htbin = 0; htbin<7; htbin++) {
+    char a[100];
+    sprintf(a, "c_mass_htbins_cat%d", htbin);
+    TCanvas *c_mass_htbins_cat = new TCanvas(a,"di-photon mass in HT bins",1600,600);
+    c_mass_htbins_cat->Divide(4, 2);
+    //c_mass_htbins_cat_5->SetGrid();
+    //c_mass_htbins_cat_6->SetGrid();
+    //c_mass_htbins_cat_7->SetGrid();
+    //c_mass_htbins_cat_8->SetGrid();
+    
+    TString title[4];
+    title[0] = "m_{e^{+}e^{-}}, cat0";
+    title[1] = "m_{e^{+}e^{-}}, cat1";
+    title[2] = "m_{e^{+}e^{-}}, cat2";
+    title[3] = "m_{e^{+}e^{-}}, cat3";
 
+    for (int i=0; i<4; i++) {
+      mass_htbins_Data[i+htbin*4]->GetXaxis()->SetTitle(title[i]);
+      mass_htbins_Data[i+htbin*4]->GetYaxis()->SetTitle("");
+      mass_htbins_Data[i+htbin*4]->SetMarkerStyle(20);
+      mass_htbins_Data[i+htbin*4]->SetMarkerSize(.4);
+      mass_htbins_Data[i+htbin*4]->SetLineColor(1);
+      mass_htbins_MC[i+htbin*4]->SetFillColor(38);
+      mass_htbins_MC[i+htbin*4]->SetLineColor(1);
+      float sf = mass_htbins_Data[i+htbin*4]->Integral()/mass_htbins_MC[i+htbin*4]->Integral();
+      if (!equalArea) sf = sf_presel;
+      mass_htbins_MC[i+htbin*4]->Scale(sf);
+      c_mass_htbins_cat->cd(i+1);
+      mass_htbins_Data[i+htbin*4]->GetXaxis()->SetRangeUser(70.,119.5);
+      mass_htbins_Data[i+htbin*4]->Draw("e");
+      mass_htbins_MC[i+htbin*4]->Draw("hist,same");
+      mass_htbins_Data[i+htbin*4]->Draw("e,same");
+      gPad->RedrawAxis();
+      leg->Draw();
+      txt1->DrawLatex(0.55,0.8,"#scale[0.8]{#splitline{CMS Preliminary}{#sqrt{s} = 8 TeV L = 19.6 fb^{-1}}}");
+      c_mass_htbins_cat->cd(5+i);
+      mass_ratio[i+htbin*4] = (TH1F*)mass_htbins_Data[i+htbin*4]->Clone();
+      mass_ratio[i+htbin*4]->Divide(mass_htbins_MC[i+htbin*4]);
+      mass_ratio[i+htbin*4]->SetMaximum(1.8);
+      mass_ratio[i+htbin*4]->SetMinimum(0.2);
+      mass_ratio[i+htbin*4]->GetXaxis()->SetRangeUser(70.,119.5);
+      mass_ratio[i+htbin*4]->GetXaxis()->SetTitle(title[i]);
+      mass_ratio[i+htbin*4]->Draw("e");
+      txt3->DrawLatex(0.35,0.25, "Data/MC ratio");
+      line_mass->Draw();
+    }
+    sprintf(a, "mass_htbins_cat%d%s.png", htbin, preselNorm_str.Data());
+    c_mass_htbins_cat->SaveAs(a);
+    sprintf(a, "mass_htbins_cat%d%s.pdf", htbin, preselNorm_str.Data());
+    c_mass_htbins_cat->SaveAs(a);
+  }  
 }

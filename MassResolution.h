@@ -72,6 +72,8 @@ class MassResolution {
     double massResolutionCorrVtx();
     double massResolutionWrongVtx();
     double massResolutionEonly();
+    double massResolutionWrongVtx(float scale1, float scale2);
+    double massResolutionEonly(float scale1, float scale2);
     double massResolutionAonly();
     double massResolutionEonlyNoSmear();
     double massResolutionCorrVtxNoSmear();

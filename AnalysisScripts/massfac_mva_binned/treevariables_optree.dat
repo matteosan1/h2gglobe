@@ -23,6 +23,10 @@ type=2 name=MET_phi
 
 type=2 name=sigmaMrvoM
 type=2 name=sigmaMwvoM
+type=2 name=sigmaMrvoMU
+type=2 name=sigmaMwvoMU
+type=2 name=sigmaMrvoMD
+type=2 name=sigmaMwvoMD
 type=2 name=sigmaEoE1
 type=2 name=sigmaEoE2
 type=2 name=ptoM1
@@ -40,6 +44,10 @@ type=2 name=mass
 type=2 name=vbfcat
 type=2 name=dipho_pt
 type=2 name=dipho_mva
+type=2 name=dipho_mva_idu
+type=2 name=dipho_mva_idd
+type=2 name=dipho_mva_sEu
+type=2 name=dipho_mva_sEd
 type=2 name=dipho_mva_cat
 
 type=2 name=et1

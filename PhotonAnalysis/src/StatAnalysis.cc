@@ -1158,9 +1158,9 @@ bool StatAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentz
                     category, isCorrectVertex, evweight, vtx, l, muVtx, mu_ind, elVtx, el_ind );
 
             if (fillOptTree) {
-                fillOpTree(l, lead_p4, sublead_p4, -2, diphoton_index, diphoton_id, -2, -2, weight, 
-                        mass, -1, -1, Higgs, -2, category, VBFevent, myVBF_Mjj, myVBFLeadJPt, 
-                        myVBFSubJPt, nVBFDijetJetCategories, isSyst, "no-syst");
+                 fillOpTree(l, lead_p4, sublead_p4, -2, diphoton_index, diphoton_id, -2, -2, weight, 
+			    mass, -1, -1, -1, -1, -1, -1, Higgs, -2, -2, -2, -2, -2, category, VBFevent, myVBF_Mjj, myVBFLeadJPt, 
+			    myVBFSubJPt, nVBFDijetJetCategories, isSyst, "no-syst");
             }
         }
         // dump BS trees if requested
@@ -2089,10 +2089,11 @@ void dumpPhoton(std::ostream & eventListText, int lab,
 }
 
 void StatAnalysis::fillOpTree(LoopAll& l, const TLorentzVector & lead_p4, const TLorentzVector & sublead_p4, Float_t vtxProb,
-        std::pair<int, int> diphoton_index, Int_t diphoton_id, Float_t phoid_mvaout_lead, Float_t phoid_mvaout_sublead,
-        Float_t weight, Float_t mass, Float_t sigmaMrv, Float_t sigmaMwv,
-        const TLorentzVector & Higgs, Float_t diphobdt_output, Int_t category, bool VBFevent, Float_t myVBF_Mjj, Float_t myVBFLeadJPt, 
-        Float_t myVBFSubJPt, Int_t nVBFDijetJetCategories, bool isSyst, std::string name1) {
+			      std::pair<int, int> diphoton_index, Int_t diphoton_id, Float_t phoid_mvaout_lead, Float_t phoid_mvaout_sublead, Float_t weight, Float_t mass, 
+			      Float_t sigmaMrv, Float_t sigmaMwv, Float_t sigmaMrv_up, Float_t sigmaMwv_up, Float_t sigmaMrv_down, Float_t sigmaMwv_down, const TLorentzVector & Higgs, 
+			      Float_t diphobdt_output, Float_t diphobdt_output_up, Float_t diphobdt_output_down,Float_t  diphobdt_output_sigmaE_up, Float_t diphobdt_output_sigmaE_down,
+			      Int_t category, bool VBFevent, Float_t myVBF_Mjj, Float_t myVBFLeadJPt, 
+			      Float_t myVBFSubJPt, Int_t nVBFDijetJetCategories, bool isSyst, std::string name1) {
 
     int vbfcat=-1;
     if(VBFevent){
@@ -2353,7 +2354,11 @@ void StatAnalysis::fillOpTree(LoopAll& l, const TLorentzVector & lead_p4, const 
         std::vector<int> & vtxlist = l.vtx_std_ranked_list->at(diphoton_id);
         l.FillTree("sigmaMrvoM", (float)sigmaMrv/mass);
         l.FillTree("sigmaMwvoM", (float)sigmaMwv/mass);
-        
+	l.FillTree("sigmaMrvoMU", (float)sigmaMrv_up/mass);
+	l.FillTree("sigmaMwvoMU", (float)sigmaMwv_up/mass);
+	l.FillTree("sigmaMrvoMD", (float)sigmaMrv_down/mass);
+        l.FillTree("sigmaMwvoMD", (float)sigmaMwv_down/mass);
+        //if (l.itype[l.current] == 3) {
         //if (l.itype[l.current] == 3) {
         //    Int_t bin = weightHist->FindBin((float)Higgs.Pt());
         //    Float_t myweight = weightHist->GetBinContent(bin);
@@ -2380,7 +2385,11 @@ void StatAnalysis::fillOpTree(LoopAll& l, const TLorentzVector & lead_p4, const 
         
         l.FillTree("dipho_mva", (float)diphobdt_output);
         l.FillTree("dipho_mva_cat", (float)category);
-        if (diphobdt_output>=bdtCategoryBoundaries.back()) computeExclusiveCategory(l,category,diphoton_index,Higgs.Pt(),Higgs.M(),diphobdt_output); 
+	l.FillTree("dipho_mva_idu", (float)diphobdt_output_up);
+	l.FillTree("dipho_mva_idd", (float)diphobdt_output_down);
+	l.FillTree("dipho_mva_sEu", (float)diphobdt_output_sigmaE_up);
+	l.FillTree("dipho_mva_sEd", (float)diphobdt_output_sigmaE_down);
+        //if (diphobdt_output>=bdtCategoryBoundaries.back()) computeExclusiveCategory(l,category,diphoton_index,Higgs.Pt(),Higgs.M(),diphobdt_output); 
     }
 };
 

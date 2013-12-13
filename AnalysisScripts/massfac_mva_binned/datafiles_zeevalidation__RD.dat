@@ -34,4 +34,4 @@ treevariables massfac_mva_binned/treevariables_optree.dat
 ## 
 ## analyzer PhotonAnalysis photonanalysis.dat
 
-analyzer MassFactorizedMvaAnalysis photonanalysis.dat analysis_settings.dat massfactorizedmvaanalysis.dat zeevalidation.dat fillOptTree=0 fillEscaleTrees=0 common/escale_and_smearing_jan22rereco_8TeV_rd_mc.dat useRunDTriggersForZee=1 puTargets=aux/AB.json.69400.observed.pileup.root,aux/C.json.69400.observed.pileup.root,aux/D.json.69400.observed.pileup.root
+analyzer MassFactorizedMvaAnalysis photonanalysis.dat analysis_settings.dat massfactorizedmvaanalysis.dat zeevalidation.dat fillOptTree=1 fillEscaleTrees=0 common/escale_and_smearing_jan22rereco_8TeV_rd_mc.dat useRunDTriggersForZee=1 puTargets=aux/AB.json.69400.observed.pileup.root,aux/C.json.69400.observed.pileup.root,aux/D.json.69400.observed.pileup.root scale_offset_file=jan22rereco_8TeV/energy_scale_offsets_rd_mc_etdep.dat
