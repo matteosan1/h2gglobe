@@ -1658,6 +1658,7 @@ void makeParametricSignalModelPlots(string sigFitFileName, string outPathName, i
     if (doBkgAndData) bkgFile->Close();
     
     FILE *file = fopen(Form("%s/table.tex",outPathName.c_str()),"w");
+    FILE *file = fopen(Form("%s/table2.tex",outPathName.c_str()),"w");
     FILE *nfile = fopen(Form("%s/table.txt",outPathName.c_str()),"w");
     if (splitVH) {
       fprintf(nfile,"---------------------------------------------------------------------------------------------------------------\n");
@@ -1700,8 +1701,10 @@ void makeParametricSignalModelPlots(string sigFitFileName, string outPathName, i
       fprintf(file,"&  %4.1f\\%%  ",100.*sigs[4]/sigs[0]);
       if (splitVH) fprintf(file,"&  %4.1f\\%%  ",100.*sigs[5]/sigs[0]);
       fprintf(file,"&  %4.2f  ",sigEffs[catString]);
-      fprintf(file,"&  %4.2f  ",fwhms[catString]);
+      //fprintf(file,"&  %4.2f  ",fwhms[catString]);  IT IS NOT IN THE TABLE THAT WE PUT IN THE NOTE
       fprintf(file,"&  %4.2f  ",fwhms[catString]/2.35);
+      fprintf(file,"& %7s","\\tabularnewline "); // EASIER TO SPLIT THE TABLE AS IN THE NOTE
+
       // bkg + data
       if (doBkgAndData) {
         pair<double,double> bkg = bkgVals[catString];
@@ -1711,14 +1714,16 @@ void makeParametricSignalModelPlots(string sigFitFileName, string outPathName, i
         fprintf(nfile,"%6.0f    ",dat.first);
         if (blind) fprintf(nfile,"%7s","----");
         else fprintf(nfile,"%7.1f  ",dat.second);
-        // tex file
-        fprintf(file,"&  %6.1f & $\\pm$ %3.1f ",bkg.first,bkg.second);
-        fprintf(file,"&  %7.1f  ",dat.first);
-        if (blind) fprintf(file,"& %7s","---- \\tabularnewline ");
-        else fprintf(file,"&  %7.1f  \\tabularnewline ",dat.second);
+        // tex file 2
+	fprintf(file2,"%15s  ",thisCatName.c_str());
+        fprintf(file2,"&  %6.1f & $\\pm$ %3.1f ",bkg.first,bkg.second);
+        fprintf(file2,"&  %7.1f  ",dat.first);
+        if (blind) fprintf(file2,"& %7s","---- \\tabularnewline ");
+        else fprintf(file2,"&  %7.1f  \\tabularnewline ",dat.second);
       }
       fprintf(nfile,"\n");
       fprintf(file,"\n");
+      fprintf(file2,"\n");
     }
     fclose(nfile);
     fclose(file);
