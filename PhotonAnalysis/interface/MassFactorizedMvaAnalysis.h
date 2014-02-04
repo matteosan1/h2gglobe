@@ -62,6 +62,7 @@ class MassFactorizedMvaAnalysis : public StatAnalysis
     bool fillEscaleTrees;
     bool fillOptree;
     bool forceStdPlotsOnZee;
+    bool jackknifeMoriondWithNewRegression;
 
     bool applyIdmvaCorrection;
     bool applySigmaECorrection;

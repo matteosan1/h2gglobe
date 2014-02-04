@@ -35,6 +35,7 @@ MassFactorizedMvaAnalysis::MassFactorizedMvaAnalysis()  :
     doCosThetaDependentInterferenceSmear=false;
     idMVASystSize = 0.01;
     photonIdMvaSmearer = 0;
+    jackknifeMoriondWithNewRegression = false;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -493,6 +494,9 @@ void MassFactorizedMvaAnalysis::Init(LoopAll& l)
     } else if( photonLevel2012IDMVA_EB != "" && photonLevel2012IDMVA_EE != "" ) {
     	l.tmvaReaderID_Single_Barrel->BookMVA("AdaBoost",photonLevel2012IDMVA_EB.c_str());
     	l.tmvaReaderID_Single_Endcap->BookMVA("AdaBoost",photonLevel2012IDMVA_EE.c_str());
+	if (jackknifeMoriondWithNewRegression)
+	    energyCorrectedError = (l.pho_regr_energyerr);
+	
 	assert( bdtTrainingType == "Moriond2013" ); 
     } else if (photonLevel2013_7TeV_IDMVA_EB != "" && photonLevel2013_7TeV_IDMVA_EE != "" ) {
     	l.tmvaReaderID_2013_7TeV_MIT_Barrel->BookMVA("AdaBoost",photonLevel2013_7TeV_IDMVA_EB.c_str());
