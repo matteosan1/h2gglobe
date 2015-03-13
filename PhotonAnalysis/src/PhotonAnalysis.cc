@@ -2060,8 +2060,7 @@ void PhotonAnalysis::PreselectPhotons(LoopAll& l, int jentry)
         float et = p4.Pt();
         pho_et.push_back(et);
 
-        // FIXME FOR UPGRADE
-        if( (eta>1.4442 && eta<1.566) || eta > 3.0 ) {
+        if( (eta>1.4442 && eta<1.566) || eta > 2.5 ) {
             continue;
         }
         pho_acc.push_back(ipho);
