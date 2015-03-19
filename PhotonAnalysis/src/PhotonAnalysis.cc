@@ -2045,7 +2045,7 @@ void PhotonAnalysis::PreselectPhotons(LoopAll& l, int jentry)
 
     for(int ipho=0; ipho<l.pho_n; ++ipho) {
 
-        l.pho_genmatched[ipho]=GenMatchedPhoton( l, ipho);
+        l.pho_genmatched[ipho] = GenMatchedPhoton(l, ipho, l.pho_genenergy[ipho]);
 
         // match all photons in the original tree with the conversions from the merged collection and save the indices
         int iConv  =l.matchPhotonToConversion(ipho);
@@ -2566,6 +2566,7 @@ void PhotonAnalysis::ReducedOutputTree(LoopAll &l, TTree * outputTree)
 	l.Branch_pho_cic4pfpasscuts_sublead( outputTree );
 
 	l.Branch_pho_genmatched(outputTree);
+	l.Branch_pho_genenergy(outputTree);
 	l.Branch_pho_regr_energy_otf(outputTree);
 	l.Branch_pho_regr_energyerr_otf(outputTree);
 
@@ -2771,8 +2772,9 @@ bool PhotonAnalysis::FindHiggsObjects(LoopAll& l){
 
 
 
-Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho){
+Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho, float& pt){
     Bool_t is_prompt = false;
+    pt = -1.;
     TLorentzVector* phop4 = (TLorentzVector*) l.pho_p4->At(ipho);
 
     for(int ip=0;ip<l.gp_n;++ip) {
@@ -2780,12 +2782,16 @@ Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho){
             continue;
         }
         TLorentzVector * p4 = (TLorentzVector*) l.gp_p4->At(ip);
-        if( p4->Pt() < 20. || fabs(p4->Eta()) > 3. ) { continue; }
+
+        if( p4->Pt() < 20. || fabs(p4->Eta()) > 3. ) { 
+            continue; 
+        }
         int mother_id = abs( l.gp_pdgid[ l.gp_mother[ip] ] );
         if( mother_id <= 25 ) {
             float dr = phop4->DeltaR(*p4);
             if (dr<0.3 && fabs((p4->Pt()-phop4->Pt())/p4->Pt()) < 0.5) {
                 is_prompt = true;
+                pt = p4->Et();
                 break;
             }
         }
