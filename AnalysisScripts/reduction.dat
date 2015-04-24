@@ -1,6 +1,6 @@
 output=my_reduced_tuple_foo.root
 
-typ=1 Fil=/afs/cern.ch/user/s/sani/work/test.root
+typ=1 Fil=/afs/cern.ch/user/s/sani/eos/cms/store/group/phys_higgs/cmshgg/processed/FixPFIsolationIssue/22AprFix/GJet_Pt-20to40_doubleEMEnriched_TuneZ2star_14TeV-pythia6_GEM2019Upg14DR-Phase1age1kMar26_PU140BX25_PH1_1K_FB_V2-v1/GJet_1_1_qqF.root
 
 inputBranches reduction/reduction_input.dat
 outputBranches reduction/reduction_output.dat

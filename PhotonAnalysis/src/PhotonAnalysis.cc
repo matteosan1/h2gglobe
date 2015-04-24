@@ -2092,6 +2092,34 @@ void PhotonAnalysis::FillReductionVariables(LoopAll& l, int jentry)
     if(PADEBUG)
 	cout<<"myFillReduceVar START"<<endl;
 
+    int iPrompt = -1;
+    int iFake = -1;
+    l.dipho_gensel = (int)l.selectGenEvents(iPrompt, iFake);
+    l.dipho_genfakeind = iFake;
+    l.dipho_genpromptind = iPrompt;
+    
+    if (iPrompt != -1)  {
+        TLorentzVector* promptp4 = (TLorentzVector*)l.gp_p4->At(iPrompt);
+        l.dipho_genprompte   = promptp4->E();
+        l.dipho_genprompteta = promptp4->Eta();
+        l.dipho_genpromptphi = promptp4->Phi();
+    } else {
+        l.dipho_genprompte = 0;
+        l.dipho_genprompteta = 0;
+        l.dipho_genpromptphi = 0;
+    }
+
+    if (iFake != -1)  {
+        TLorentzVector* fakep4 = (TLorentzVector*)l.genjet_algo1_p4->At(iFake);
+        l.dipho_genfakee = fakep4->E();
+        l.dipho_genfakeeta = fakep4->Eta();
+        l.dipho_genfakephi = fakep4->Phi();
+    } else {
+        l.dipho_genfakee = 0;
+        l.dipho_genfakeeta = 0;
+        l.dipho_genfakephi = 0;
+    }
+
     // Run on-the-fly regression at Reduction Step
     if( l.typerun == LoopAll::kReduce ) {
         GetRegressionCorrections(l);  // need to pass LoopAll
@@ -2180,7 +2208,7 @@ bool PhotonAnalysis::SelectEventsReduction(LoopAll& l, int jentry)
     if(PADEBUG)  cout << " ****************** SelectEventsReduction " << endl;
     // require at least two reconstructed photons to store the event
 
-    if( pho_acc.size() < 2 ) { return false; }
+    if( pho_acc.size() < 2 ) {  return false; }
 
     vtxAna_.clear();
     l.vtx_std_ranked_list->clear();
@@ -2255,7 +2283,8 @@ bool PhotonAnalysis::SelectEventsReduction(LoopAll& l, int jentry)
                 std::swap( diphotons[id].first,  diphotons[id].second );
                 std::swap( lead_p4,  sublead_p4 );
             }
-            
+  
+
             if( lead_p4.Pt() < presel_scet1 || sublead_p4.Pt() < presel_scet2 ||
                 fabs(lead_p4.Eta()) > presel_maxeta || fabs(sublead_p4.Eta()) > presel_maxeta ) {
                 vtxAna_.discardLastDipho();
@@ -2546,7 +2575,17 @@ void PhotonAnalysis::ReducedOutputTree(LoopAll &l, TTree * outputTree)
 	l.Branch_pho_mitmva(outputTree);
 	l.Branch_pho_drtotk_25_99(outputTree);
 
-	l.Branch_dipho_n(outputTree);
+	l.Branch_dipho_n(outputTree);	
+    l.Branch_dipho_gensel(outputTree);
+	l.Branch_dipho_genfakeind(outputTree);
+	l.Branch_dipho_genpromptind(outputTree);
+	l.Branch_dipho_genfakee(outputTree);
+	l.Branch_dipho_genprompte(outputTree);
+	l.Branch_dipho_genfakeeta(outputTree);
+	l.Branch_dipho_genprompteta(outputTree);
+	l.Branch_dipho_genfakephi(outputTree);
+	l.Branch_dipho_genpromptphi(outputTree);
+
 	l.Branch_dipho_leadind(outputTree);
 	l.Branch_dipho_subleadind(outputTree);
 	l.Branch_dipho_vtxind(outputTree);
@@ -2772,9 +2811,9 @@ bool PhotonAnalysis::FindHiggsObjects(LoopAll& l){
 
 
 
-Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho, float& pt){
+Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho, float& energy){
     Bool_t is_prompt = false;
-    pt = -1.;
+    energy = -1.;
     TLorentzVector* phop4 = (TLorentzVector*) l.pho_p4->At(ipho);
 
     for(int ip=0;ip<l.gp_n;++ip) {
@@ -2791,7 +2830,7 @@ Bool_t PhotonAnalysis::GenMatchedPhoton(LoopAll& l, int ipho, float& pt){
             float dr = phop4->DeltaR(*p4);
             if (dr<0.3 && fabs((p4->Pt()-phop4->Pt())/p4->Pt()) < 0.5) {
                 is_prompt = true;
-                pt = p4->Et();
+                energy = p4->E();
                 break;
             }
         }

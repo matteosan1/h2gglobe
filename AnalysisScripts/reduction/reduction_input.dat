@@ -70,11 +70,11 @@ vtx_std_n
 vtx_std_tkind
 vtx_std_ntks
 vtx_std_tkweight
-tk_n
-tk_p4
-tk_pterr
-tk_quality
-tk_vtx_pos
+##tk_n
+##tk_p4
+##tk_pterr
+##tk_quality
+##tk_vtx_pos
 
 ## DeltaR to track
 el_std_n
@@ -95,9 +95,10 @@ gp_p4:1
 gp_status:1
 gp_pdgid:1
 gp_mother:1
+genjet_algo1_n:1
+genjet_algo1_p4:1
+genjet_algo1_em:1
 
-#genjet_algo1_n:1
-#genjet_algo1_p4:1
 #genjet_algo2_n:1
 #genjet_algo2_p4:1
 #genjet_algo3_n:1
